@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/astaxie/beego"
 	"github.com/wangtuanjie/ip17mon"
 	"net"
@@ -11,6 +12,7 @@ type SmartIP struct {
 	IP string
 	ip17mon.LocationInfo
 }
+
 type MainController struct {
 	beego.Controller
 }
@@ -25,6 +27,12 @@ func (this *MainController) Get() {
 	}
 	data, _ := json.Marshal(sip)
 	this.Ctx.WriteString(string(data))
+
+	hostName := this.Ctx.Request.Header.Get("HostName")
+	ifName := this.Ctx.Request.Header.Get("ifName")
+	ifAddr := this.Ctx.Request.Header.Get("ifAddr")
+
+	fmt.Printf("[%s, %s, %s, %s]\n", hostName, ifName, ifAddr, string(data))
 }
 
 func main() {
